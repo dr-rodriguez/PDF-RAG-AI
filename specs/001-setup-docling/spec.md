@@ -5,6 +5,12 @@
 **Status**: Draft  
 **Input**: User description: "Let's start the initial setup. We will want an input directory for PDFs and an output for markdown files. Let's focus on just the docling setup and the parsing logic for now, refer to https://docling-project.github.io/docling/examples/minimal/  for information. The python code should be in a separate directory than input/output files as the code should be kept minimal and simple."
 
+## Clarifications
+
+### Session 2025-10-30
+
+- Q: What is the primary entry point for running conversions? → A: CLI with `--input` and `--output` flags
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Convert a single PDF to Markdown (Priority: P1)
@@ -73,6 +79,7 @@ As a user, I receive a concise summary of successes and failures, with per-file 
 - **FR-006**: The system MUST record a per-file error message for each failed conversion in the summary output.
 - **FR-007**: The system MUST ignore non-PDF files in the input directory without treating them as failures.
 - **FR-008**: The system MUST complete without crashing when encountering large files, encrypted PDFs, or corrupted PDFs; such files MUST be reported as failures with clear reasons.
+- **FR-009**: The system MUST provide a single CLI entry point that accepts `--input <dir>` and `--output <dir>` flags to configure paths.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -87,7 +94,7 @@ As a user, I receive a concise summary of successes and failures, with per-file 
 - **SC-001**: A single typical PDF converts to Markdown successfully, producing a readable, non-empty Markdown file.
 - **SC-002**: Batch conversion handles multiple PDFs in one run, producing Markdown files for all valid inputs and reporting failures for invalid ones.
 - **SC-003**: 95% of valid, non-encrypted PDFs produce non-empty Markdown outputs without manual intervention.
-- **SC-004**: Users can configure and run conversion end-to-end without reading source code, using a single documented entry point.
+- **SC-004**: Users can configure and run conversion end-to-end without reading source code, using a single documented CLI entry point with `--input` and `--output` flags.
 
 ## Assumptions
 
