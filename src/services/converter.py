@@ -5,7 +5,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 try:
-    from docling.document_converter import DocumentConverter
+    from docling.datamodel.accelerator_options import AcceleratorDevice, AcceleratorOptions
+    from docling.datamodel.base_models import InputFormat
+    from docling.datamodel.pipeline_options import PdfPipelineOptions
+    from docling.document_converter import DocumentConverter, PdfFormatOption
 except ImportError as e:
     raise ImportError("Docling is not installed. Please run: uv sync") from e
 
@@ -41,8 +44,22 @@ def convert_pdf_to_markdown(document: Document) -> ConversionResult:
         or error message (on failure). Note: output.path will be empty; caller should set it.
     """
     try:
-        # Initialize Docling converter
-        converter = DocumentConverter()
+
+        # Some explicit options for more control
+        pipeline_options = PdfPipelineOptions()
+        pipeline_options.do_ocr = True
+        pipeline_options.do_table_structure = False
+        pipeline_options.table_structure_options.do_cell_matching = False
+        pipeline_options.ocr_options.lang = ["en"]
+        pipeline_options.accelerator_options = AcceleratorOptions(
+            num_threads=4, device=AcceleratorDevice.AUTO
+        )
+
+        converter = DocumentConverter(
+            format_options={
+                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+            }
+        )
 
         # Convert PDF to Markdown
         result = converter.convert(str(document.path))
