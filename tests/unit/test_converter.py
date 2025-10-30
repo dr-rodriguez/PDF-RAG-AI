@@ -1,7 +1,7 @@
 """Unit tests for converter service."""
 
 import tempfile
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from src.models.types import ConversionJob, ConversionStatus
@@ -34,7 +34,7 @@ def test_convert_batch_empty_directory(tmp_path):
 
 def test_format_job_summary_empty_job():
     """Test formatting empty job summary."""
-    job = ConversionJob(start_time=datetime.now(datetime.UTC), end_time=datetime.now(datetime.UTC))
+    job = ConversionJob(start_time=datetime.now(UTC), end_time=datetime.now(UTC))
     summary = format_job_summary(job)
     assert "Processed: 0" in summary
     assert "Succeeded: 0" in summary

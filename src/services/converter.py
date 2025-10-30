@@ -1,12 +1,12 @@
 """PDF to Markdown conversion service using Docling."""
 
 import logging
-from datetime import datetime
+from datetime import datetime, UTC
 from pathlib import Path
 
 try:
-    from docling import DocumentConverter
     from docling.datamodel.base_models import InputFormat
+    from docling.document_converter import DocumentConverter
 except ImportError as e:
     raise ImportError("Docling is not installed. Please run: uv sync") from e
 
@@ -160,7 +160,7 @@ def convert_batch(input_dir: str, output_dir: str) -> ConversionJob:
     from src.lib.io_utils import find_pdf_files
 
     job = ConversionJob(
-        start_time=datetime.now(datetime.UTC),
+        start_time=datetime.now(UTC),
         docling_version=DOCLING_VERSION,
     )
 
@@ -174,7 +174,7 @@ def convert_batch(input_dir: str, output_dir: str) -> ConversionJob:
         result = convert_single_file(str(pdf_path), str(md_path))
         job.add_result(result)
 
-    job.end_time = datetime.now(datetime.UTC)
+    job.end_time = datetime.now(UTC)
     return job
 
 
