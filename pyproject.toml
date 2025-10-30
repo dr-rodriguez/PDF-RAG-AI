@@ -1,13 +1,24 @@
 [project]
 name = "pdf-rag-ai"
 version = "0.1.0"
-description = "Add your description here"
+description = "PDF RAG Pipeline for AI"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "click>=8.3.0",
     "docling==2.59.0",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[project.scripts]
+pdf-rag = "src.cli.main:cli"
 
 [dependency-groups]
 dev = [
@@ -34,3 +45,6 @@ ignore = []
 [tool.black]
 line-length = 100
 target-version = ["py313"]
+
+[tool.uv]
+package = true
