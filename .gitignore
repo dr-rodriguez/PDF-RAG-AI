@@ -6,10 +6,32 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
-.venv
-
 # AI
 .cursor/commands/
 .specify/scripts/
+
+# Virtual environments
+.venv
+venv/
+
+# uv
+.uv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
 

@@ -19,10 +19,10 @@ description: "Task list for PDF-to-Markdown Conversion Setup feature"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project directory structure (src/cli/, src/services/, src/models/, src/lib/, tests/unit/, tests/contract/)
-- [ ] T002 [P] Initialize Python project dependencies: add docling (pinned version) and click to pyproject.toml
-- [ ] T003 [P] Configure pytest testing framework in pyproject.toml
-- [ ] T004 [P] Configure linting and formatting tools (ruff/black) in pyproject.toml
+- [X] T001 Create project directory structure (src/cli/, src/services/, src/models/, src/lib/, tests/unit/, tests/contract/)
+- [X] T002 [P] Initialize Python project dependencies: add docling (pinned version) and click to pyproject.toml
+- [X] T003 [P] Configure pytest testing framework in pyproject.toml
+- [X] T004 [P] Configure linting and formatting tools (ruff/black) in pyproject.toml
 
 ---
 
@@ -32,13 +32,13 @@ description: "Task list for PDF-to-Markdown Conversion Setup feature"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 [P] Create Document data class in src/models/types.py with attributes: filename, path, sizeBytes, numPages
-- [ ] T006 [P] Create OutputArtifact data class in src/models/types.py with attributes: filename, path, sizeBytes, sourceDocument
-- [ ] T007 [P] Create ConversionResult data class in src/models/types.py with attributes: document, status (enum), message, output
-- [ ] T008 [P] Create ConversionJob data class in src/models/types.py with attributes: startTime, endTime, total, succeeded, failed, results, doclingVersion
-- [ ] T009 [P] Implement conservative validation helpers in src/lib/io_utils.py: validate_input_directory, validate_output_directory, ensure_output_directory
-- [ ] T010 [P] Implement file discovery helpers in src/lib/io_utils.py: find_pdf_files, map_pdf_to_output_path
-- [ ] T011 [P] Implement logging configuration in src/lib/io_utils.py: setup_logging for structured summary output
+- [X] T005 [P] Create Document data class in src/models/types.py with attributes: filename, path, sizeBytes, numPages
+- [X] T006 [P] Create OutputArtifact data class in src/models/types.py with attributes: filename, path, sizeBytes, sourceDocument
+- [X] T007 [P] Create ConversionResult data class in src/models/types.py with attributes: document, status (enum), message, output
+- [X] T008 [P] Create ConversionJob data class in src/models/types.py with attributes: startTime, endTime, total, succeeded, failed, results, doclingVersion
+- [X] T009 [P] Implement conservative validation helpers in src/lib/io_utils.py: validate_input_directory, validate_output_directory, ensure_output_directory
+- [X] T010 [P] Implement file discovery helpers in src/lib/io_utils.py: find_pdf_files, map_pdf_to_output_path
+- [X] T011 [P] Implement logging configuration in src/lib/io_utils.py: setup_logging for structured summary output
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -52,12 +52,12 @@ description: "Task list for PDF-to-Markdown Conversion Setup feature"
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Implement Docling integration function in src/services/converter.py: convert_pdf_to_markdown(document: Document) -> ConversionResult
-- [ ] T013 [US1] Implement single-file conversion orchestration in src/services/converter.py: convert_single_file(input_path: str, output_path: str) -> ConversionResult
-- [ ] T014 [US1] Implement CLI command structure in src/cli/main.py: parse command with --input and --output flags using Click
-- [ ] T015 [US1] Wire single-file conversion in src/cli/main.py: connect parse command to converter service for first PDF found
-- [ ] T016 [US1] Add error handling in src/services/converter.py: catch Docling exceptions, encrypted PDF errors, and return ConversionResult with failure status
-- [ ] T017 [US1] Implement output file overwrite logic in src/services/converter.py: ensure existing markdown files are overwritten by default
+- [X] T012 [US1] Implement Docling integration function in src/services/converter.py: convert_pdf_to_markdown(document: Document) -> ConversionResult
+- [X] T013 [US1] Implement single-file conversion orchestration in src/services/converter.py: convert_single_file(input_path: str, output_path: str) -> ConversionResult
+- [X] T014 [US1] Implement CLI command structure in src/cli/main.py: parse command with --input and --output flags using Click
+- [X] T015 [US1] Wire single-file conversion in src/cli/main.py: connect parse command to converter service for first PDF found
+- [X] T016 [US1] Add error handling in src/services/converter.py: catch Docling exceptions, encrypted PDF errors, and return ConversionResult with failure status
+- [X] T017 [US1] Implement output file overwrite logic in src/services/converter.py: ensure existing markdown files are overwritten by default
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently. Single PDF conversion works end-to-end.
 
@@ -71,10 +71,10 @@ description: "Task list for PDF-to-Markdown Conversion Setup feature"
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Extend converter service in src/services/converter.py: implement convert_batch(input_dir: str, output_dir: str) -> ConversionJob that processes all PDFs sequentially
-- [ ] T019 [US2] Update CLI command in src/cli/main.py: modify parse command to process all PDFs in input directory (replace single-file logic)
-- [ ] T020 [US2] Implement file filtering in src/services/converter.py: ensure only .pdf files (case-insensitive) are processed, ignore non-PDF files
-- [ ] T021 [US2] Add batch job tracking in src/services/converter.py: collect all ConversionResults, update ConversionJob counts (total, succeeded, failed)
+- [X] T018 [US2] Extend converter service in src/services/converter.py: implement convert_batch(input_dir: str, output_dir: str) -> ConversionJob that processes all PDFs sequentially
+- [X] T019 [US2] Update CLI command in src/cli/main.py: modify parse command to process all PDFs in input directory (replace single-file logic)
+- [X] T020 [US2] Implement file filtering in src/services/converter.py: ensure only .pdf files (case-insensitive) are processed, ignore non-PDF files
+- [X] T021 [US2] Add batch job tracking in src/services/converter.py: collect all ConversionResults, update ConversionJob counts (total, succeeded, failed)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently. Batch conversion handles multiple PDFs in one run.
 
@@ -88,11 +88,11 @@ description: "Task list for PDF-to-Markdown Conversion Setup feature"
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Implement human-readable summary formatter in src/services/converter.py: format_job_summary(job: ConversionJob) -> str with format "Processed: X | Succeeded: Y | Failed: Z" and per-file lines
-- [ ] T023 [US3] Add JSON summary formatter in src/services/converter.py: format_job_summary_json(job: ConversionJob) -> dict matching contract schema
-- [ ] T024 [US3] Implement --json flag handling in src/cli/main.py: add --json option to parse command, emit JSON summary when enabled
-- [ ] T025 [US3] Wire summary output in src/cli/main.py: after ConversionJob completes, emit summary (human-readable or JSON based on flag)
-- [ ] T026 [US3] Enhance error messages in src/services/converter.py: provide clear failure reasons (encrypted PDF, corrupted file, Docling parsing error, etc.)
+- [X] T022 [US3] Implement human-readable summary formatter in src/services/converter.py: format_job_summary(job: ConversionJob) -> str with format "Processed: X | Succeeded: Y | Failed: Z" and per-file lines
+- [X] T023 [US3] Add JSON summary formatter in src/services/converter.py: format_job_summary_json(job: ConversionJob) -> dict matching contract schema
+- [X] T024 [US3] Implement --json flag handling in src/cli/main.py: add --json option to parse command, emit JSON summary when enabled
+- [X] T025 [US3] Wire summary output in src/cli/main.py: after ConversionJob completes, emit summary (human-readable or JSON based on flag)
+- [X] T026 [US3] Enhance error messages in src/services/converter.py: provide clear failure reasons (encrypted PDF, corrupted file, Docling parsing error, etc.)
 
 **Checkpoint**: All user stories should now be independently functional. Complete end-to-end pipeline with clear reporting.
 
@@ -102,14 +102,14 @@ description: "Task list for PDF-to-Markdown Conversion Setup feature"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T027 [P] Add unit tests for converter service in tests/unit/test_converter.py: test single file conversion, batch conversion, error handling
-- [ ] T028 [P] Add unit tests for I/O utilities in tests/unit/test_io_utils.py: test directory validation, PDF discovery, path mapping
-- [ ] T029 [P] Add contract tests for CLI in tests/contract/test_cli.py: test parse command with various inputs, verify exit codes, summary formats
-- [ ] T030 Verify quickstart.md instructions work end-to-end: test install, usage examples, troubleshooting scenarios
-- [ ] T031 Update README.md with feature documentation: usage examples, CLI reference, error handling guide
-- [ ] T032 Pin exact Docling version in pyproject.toml: replace constraint with exact version (e.g., docling==1.x.y) as per research.md decision
-- [ ] T033 Add docling version tracking in ConversionJob: capture and include doclingVersion in job summary for provenance
-- [ ] T034 Validate edge cases per spec.md: empty input directory, duplicate base names, large files, image-only PDFs, encrypted PDFs
+- [X] T027 [P] Add unit tests for converter service in tests/unit/test_converter.py: test single file conversion, batch conversion, error handling
+- [X] T028 [P] Add unit tests for I/O utilities in tests/unit/test_io_utils.py: test directory validation, PDF discovery, path mapping
+- [X] T029 [P] Add contract tests for CLI in tests/contract/test_cli.py: test parse command with various inputs, verify exit codes, summary formats
+- [X] T030 Verify quickstart.md instructions work end-to-end: test install, usage examples, troubleshooting scenarios
+- [X] T031 Update README.md with feature documentation: usage examples, CLI reference, error handling guide
+- [X] T032 Pin exact Docling version in pyproject.toml: replace constraint with exact version (e.g., docling==1.x.y) as per research.md decision
+- [X] T033 Add docling version tracking in ConversionJob: capture and include doclingVersion in job summary for provenance
+- [X] T034 Validate edge cases per spec.md: empty input directory, duplicate base names, large files, image-only PDFs, encrypted PDFs
 
 ---
 

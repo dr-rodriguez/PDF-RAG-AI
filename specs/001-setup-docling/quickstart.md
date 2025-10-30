@@ -13,10 +13,10 @@ uv sync
 ## Usage
 ```bash
 # Single run (non-recursive v1)
-python -m src.cli.main --input ./input --output ./output
+uv run python -m src.cli.main --input ./input --output ./output
 
 # JSON summary
-python -m src.cli.main -i ./input -o ./output --json
+uv run python -m src.cli.main -i ./input -o ./output --json
 ```
 
 ## Expected Behavior
