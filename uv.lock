@@ -999,7 +999,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = ">=8.3.0" },
-    { name = "docling", specifier = ">=2.0" },
+    { name = "docling", specifier = "==2.59.0" },
 ]
 
 [package.metadata.requires-dev]

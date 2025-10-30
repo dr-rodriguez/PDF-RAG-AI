@@ -1,8 +1,5 @@
 """Unit tests for I/O utilities."""
 
-import tempfile
-from pathlib import Path
-
 import pytest
 
 from src.lib.io_utils import (

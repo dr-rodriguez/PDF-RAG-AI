@@ -4,7 +4,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Optional
 
 
 class ConversionStatus(str, Enum):
@@ -20,8 +19,8 @@ class Document:
 
     filename: str
     path: str
-    sizeBytes: Optional[int] = None
-    numPages: Optional[int] = None
+    size_bytes: int | None = None
+    num_pages: int | None = None
 
     def __post_init__(self):
         """Validate document attributes."""
@@ -37,8 +36,8 @@ class OutputArtifact:
 
     filename: str
     path: str
-    sizeBytes: Optional[int] = None
-    sourceDocument: Optional[Document] = None
+    size_bytes: int | None = None
+    source_document: Document | None = None
 
     def __post_init__(self):
         """Validate output artifact attributes."""
@@ -52,8 +51,8 @@ class ConversionResult:
 
     document: Document
     status: ConversionStatus
-    message: Optional[str] = None
-    output: Optional[OutputArtifact] = None
+    message: str | None = None
+    output: OutputArtifact | None = None
 
     def __post_init__(self):
         """Validate conversion result consistency."""
@@ -67,20 +66,20 @@ class ConversionResult:
 class ConversionJob:
     """Represents a batch conversion job processing multiple PDFs."""
 
-    startTime: datetime
-    endTime: Optional[datetime] = None
+    start_time: datetime
+    end_time: datetime | None = None
     total: int = 0
     succeeded: int = 0
     failed: int = 0
     results: list[ConversionResult] = field(default_factory=list)
-    doclingVersion: Optional[str] = None
+    docling_version: str | None = None
 
     @property
-    def durationMs(self) -> Optional[int]:
+    def duration_ms(self) -> int | None:
         """Calculate job duration in milliseconds."""
-        if self.endTime is None:
+        if self.end_time is None:
             return None
-        delta = self.endTime - self.startTime
+        delta = self.end_time - self.start_time
         return int(delta.total_seconds() * 1000)
 
     def add_result(self, result: ConversionResult) -> None:

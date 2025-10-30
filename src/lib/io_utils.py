@@ -2,7 +2,6 @@
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 
 def validate_input_directory(input_dir: str) -> Path:

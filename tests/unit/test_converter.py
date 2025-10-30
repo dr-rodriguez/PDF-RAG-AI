@@ -4,8 +4,6 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-import pytest
-
 from src.models.types import ConversionJob, ConversionStatus
 from src.services.converter import (
     convert_batch,
@@ -37,7 +35,9 @@ def test_convert_batch_empty_directory(tmp_path):
 
 def test_format_job_summary_empty_job():
     """Test formatting empty job summary."""
-    job = ConversionJob(startTime=datetime.utcnow(), endTime=datetime.utcnow())
+    job = ConversionJob(
+        start_time=datetime.now(datetime.UTC), end_time=datetime.now(datetime.UTC)
+    )
     summary = format_job_summary(job)
     assert "Processed: 0" in summary
     assert "Succeeded: 0" in summary
@@ -46,7 +46,9 @@ def test_format_job_summary_empty_job():
 
 def test_format_job_summary_json_empty_job():
     """Test formatting empty job summary as JSON."""
-    job = ConversionJob(startTime=datetime.utcnow(), endTime=datetime.utcnow())
+    job = ConversionJob(
+        startTime=datetime.now(datetime.UTC), endTime=datetime.now(datetime.UTC)
+    )
     summary = format_job_summary_json(job)
     assert summary["total"] == 0
     assert summary["succeeded"] == 0
@@ -68,7 +70,16 @@ def test_format_job_summary_json_structure():
         doclingVersion="2.59.0",
     )
     summary = format_job_summary_json(job)
-    required_keys = ["startTime", "endTime", "durationMs", "total", "succeeded", "failed", "doclingVersion", "results"]
+    required_keys = [
+        "startTime",
+        "endTime",
+        "durationMs",
+        "total",
+        "succeeded",
+        "failed",
+        "doclingVersion",
+        "results",
+    ]
     for key in required_keys:
         assert key in summary, f"Missing required key: {key}"
 

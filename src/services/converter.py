@@ -3,7 +3,6 @@
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 try:
     from docling import DocumentConverter
@@ -162,8 +161,8 @@ def convert_batch(input_dir: str, output_dir: str) -> ConversionJob:
     from src.lib.io_utils import find_pdf_files
 
     job = ConversionJob(
-        startTime=datetime.utcnow(),
-        doclingVersion=DOCLING_VERSION,
+        start_time=datetime.now(datetime.UTC),
+        docling_version=DOCLING_VERSION,
     )
 
     # Find all PDF files
@@ -176,7 +175,7 @@ def convert_batch(input_dir: str, output_dir: str) -> ConversionJob:
         result = convert_single_file(str(pdf_path), str(md_path))
         job.add_result(result)
 
-    job.endTime = datetime.utcnow()
+    job.end_time = datetime.now(datetime.UTC)
     return job
 
 

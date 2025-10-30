@@ -45,7 +45,15 @@ def test_cli_nonexistent_input():
     with tempfile.TemporaryDirectory() as tmpdir:
         output_dir = Path(tmpdir) / "output"
         result = subprocess.run(
-            [sys.executable, "-m", "src.cli.main", "--input", "/nonexistent", "--output", str(output_dir)],
+            [
+                sys.executable,
+                "-m",
+                "src.cli.main",
+                "--input",
+                "/nonexistent",
+                "--output",
+                str(output_dir),
+            ],
             capture_output=True,
             text=True,
         )
@@ -59,7 +67,15 @@ def test_cli_empty_input_directory():
         input_dir.mkdir()
         output_dir = Path(tmpdir) / "output"
         result = subprocess.run(
-            [sys.executable, "-m", "src.cli.main", "--input", str(input_dir), "--output", str(output_dir)],
+            [
+                sys.executable,
+                "-m",
+                "src.cli.main",
+                "--input",
+                str(input_dir),
+                "--output",
+                str(output_dir),
+            ],
             capture_output=True,
             text=True,
         )

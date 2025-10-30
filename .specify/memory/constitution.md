@@ -40,8 +40,7 @@ Rationale: Enables isolated verification, easier debugging, and safer changes.
 
 ### IV. CLI-First with Text I/O
 Each stage MUST expose a CLI. Inputs via stdin/args; normal output to stdout;
-errors to stderr. JSON output MUST be supported; a human-readable mode SHOULD
-also be provided when feasible.
+errors to stderr.
 
 Rationale: Improves composability, scripting, and observability.
 
@@ -85,4 +84,4 @@ Rationale: Traceability for RAG quality and stable consumer contracts.
 - Compliance: All PRs MUST include a Constitution Check in plans/specs where
   applicable.
 
-**Version**: 1.0.0 | **Ratified**: 2025-10-30 | **Last Amended**: 2025-10-30
+**Version**: 1.1.0 | **Ratified**: 2025-10-30 | **Last Amended**: 2025-10-30
