@@ -1,0 +1,2 @@
+We will create a simple PDF to RAG pipeline using Docling https://docling-project.github.io/docling/ to parse a set of large PDF files into markdown files and then into a Vector database that can be utilized by an LLM. 
+We will use a local LLM model through Ollama and use Pydantic AI https://ai.pydantic.dev/ to build a simple CLI to ask questions of our RAG-enhanced model.
