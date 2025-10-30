@@ -1,7 +1,7 @@
 """PDF to Markdown conversion service using Docling."""
 
 import logging
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from pathlib import Path
 
 try:
@@ -57,7 +57,7 @@ def convert_pdf_to_markdown(document: Document) -> ConversionResult:
             output=OutputArtifact(
                 filename=Path(document.path).stem + ".md",
                 path="",  # Will be set by caller when writing file
-                sourceDocument=document,
+                source_document=document,
             ),
             message=md_content,  # Store markdown content in message temporarily
         )
@@ -99,7 +99,7 @@ def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
         document = Document(
             filename=pdf_path.name,
             path=str(pdf_path),
-            sizeBytes=pdf_path.stat().st_size if pdf_path.exists() else None,
+            size_bytes=pdf_path.stat().st_size if pdf_path.exists() else None,
         )
     except Exception as e:
         return ConversionResult(
@@ -132,8 +132,8 @@ def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
             output=OutputArtifact(
                 filename=md_path.name,
                 path=str(md_path),
-                sizeBytes=md_path.stat().st_size if md_path.exists() else None,
-                sourceDocument=document,
+                size_bytes=md_path.stat().st_size if md_path.exists() else None,
+                source_document=document,
             ),
             message=None,  # Clear temporary storage
         )
