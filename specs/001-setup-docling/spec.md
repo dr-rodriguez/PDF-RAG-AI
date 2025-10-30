@@ -73,7 +73,7 @@ As a user, I receive a concise summary of successes and failures, with per-file 
 
 - **FR-001**: The system MUST allow configuration of an input directory for source PDFs and an output directory for generated Markdown files.
 - **FR-002**: The system MUST convert each `.pdf` file found in the input directory into a `.md` file in the output directory using the same base filename.
-- **FR-003**: The system MUST support converting a single specified PDF and batch-converting all PDFs in the input directory.
+- **FR-003**: The system MUST support converting a single specified PDF (batch with one file) and batch-converting all PDFs in the input directory.
 - **FR-004**: The system MUST overwrite existing output files with the same name by default.
 - **FR-005**: The system MUST produce a human-readable summary at the end with counts of total files, successes, and failures.
 - **FR-006**: The system MUST record a per-file error message for each failed conversion in the summary output.
@@ -93,7 +93,7 @@ As a user, I receive a concise summary of successes and failures, with per-file 
 
 - **SC-001**: A single typical PDF converts to Markdown successfully, producing a readable, non-empty Markdown file.
 - **SC-002**: Batch conversion handles multiple PDFs in one run, producing Markdown files for all valid inputs and reporting failures for invalid ones.
-- **SC-003**: 95% of valid, non-encrypted PDFs produce non-empty Markdown outputs without manual intervention.
+- **SC-003**: 95% of valid, non-encrypted PDFs produce non-empty Markdown outputs without manual intervention. STRETCH GOAL.
 - **SC-004**: Users can configure and run conversion end-to-end without reading source code, using a single documented CLI entry point with `--input` and `--output` flags.
 
 ## Assumptions

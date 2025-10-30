@@ -63,6 +63,9 @@ Rationale: Traceability for RAG quality and stable consumer contracts.
   small adapter surface.
 - Reproducibility: End-to-end runs MUST be replayable given the same inputs,
   config, and pinned dependency set.
+- Code Simplicity: Scripts MUST be kept simple and appropriate for
+  intermediate-level Python developers. Avoid over-engineering and complex
+  abstractions that hinder readability and maintainability.
 
 ## Development Workflow
 
