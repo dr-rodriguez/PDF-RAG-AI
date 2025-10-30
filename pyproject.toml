@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "click>=8.3.0",
     "docling==2.59.0",
+    "huggingface-hub[hf-xet]>=0.36.0",
 ]
 
 [build-system]

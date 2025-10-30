@@ -5,7 +5,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 try:
-    from docling.datamodel.base_models import InputFormat
     from docling.document_converter import DocumentConverter
 except ImportError as e:
     raise ImportError("Docling is not installed. Please run: uv sync") from e
@@ -43,7 +42,7 @@ def convert_pdf_to_markdown(document: Document) -> ConversionResult:
     """
     try:
         # Initialize Docling converter
-        converter = DocumentConverter(format=InputFormat.MD)
+        converter = DocumentConverter()
 
         # Convert PDF to Markdown
         result = converter.convert(str(document.path))
