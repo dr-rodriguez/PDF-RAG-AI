@@ -8,9 +8,7 @@ try:
     from docling import DocumentConverter
     from docling.datamodel.base_models import InputFormat
 except ImportError as e:
-    raise ImportError(
-        "Docling is not installed. Please run: uv sync"
-    ) from e
+    raise ImportError("Docling is not installed. Please run: uv sync") from e
 
 from src.lib.io_utils import map_pdf_to_output_path
 from src.models.types import (
@@ -24,6 +22,7 @@ from src.models.types import (
 # Get docling version for provenance
 try:
     import docling
+
     DOCLING_VERSION = docling.__version__
 except (ImportError, AttributeError):
     DOCLING_VERSION = "unknown"
@@ -195,56 +194,10 @@ def format_job_summary(job: ConversionJob) -> str:
 
     for result in job.results:
         if result.status == ConversionStatus.SUCCESS and result.output:
-            lines.append(
-                f"- {result.document.filename}: OK -> {result.output.filename}"
-            )
+            lines.append(f"- {result.document.filename}: OK -> {result.output.filename}")
         else:
             lines.append(
                 f"- {result.document.filename}: ERROR: {result.message or 'Unknown error'}"
             )
 
     return "\n".join(lines)
-
-
-def format_job_summary_json(job: ConversionJob) -> dict:
-    """
-    Format a JSON-serializable summary of the conversion job.
-
-    Args:
-        job: ConversionJob to format
-
-    Returns:
-        Dictionary matching the contract schema
-    """
-    return {
-        "startTime": job.startTime.isoformat() + "Z",
-        "endTime": job.endTime.isoformat() + "Z" if job.endTime else None,
-        "durationMs": job.durationMs,
-        "total": job.total,
-        "succeeded": job.succeeded,
-        "failed": job.failed,
-        "doclingVersion": job.doclingVersion,
-        "results": [
-            {
-                "document": {
-                    "filename": r.document.filename,
-                    "path": r.document.path,
-                    "sizeBytes": r.document.sizeBytes,
-                    "numPages": r.document.numPages,
-                },
-                "status": r.status.value,
-                "message": r.message,
-                "output": (
-                    {
-                        "filename": r.output.filename,
-                        "path": r.output.path,
-                        "sizeBytes": r.output.sizeBytes,
-                    }
-                    if r.output
-                    else None
-                ),
-            }
-            for r in job.results
-        ],
-    }
-

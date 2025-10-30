@@ -6,7 +6,7 @@ PDF-to-Markdown conversion tool using Docling for RAG (Retrieval-Augmented Gener
 
 - Convert PDF files to Markdown format using Docling
 - Batch processing of multiple PDFs
-- Human-readable and JSON summary output
+- Human-readable output
 - Error handling for encrypted, corrupted, and invalid PDFs
 - Overwrite protection with clear reporting
 
@@ -26,25 +26,17 @@ uv sync
 uv run python -m src.cli.main --input ./input --output ./output
 ```
 
-### JSON Output
-
-```bash
-# Get machine-readable JSON summary
-uv run python -m src.cli.main -i ./input -o ./output --json
-```
-
 ## CLI Reference
 
 ### Command: `parse`
 
 ```bash
-pdf-rag parse --input <INPUT_DIR> --output <OUTPUT_DIR> [--json]
+pdf-rag parse --input <INPUT_DIR> --output <OUTPUT_DIR>
 ```
 
 **Arguments:**
 - `--input`, `-i` (required): Path to directory containing source PDFs
 - `--output`, `-o` (required): Path to directory where Markdown files will be written (created if missing)
-- `--json` (optional): Emit machine-readable JSON summary instead of human-readable format
 
 **Exit Codes:**
 - `0`: Conversion completed successfully (may include failures, but no I/O errors)

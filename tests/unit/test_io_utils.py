@@ -91,4 +91,3 @@ def test_map_pdf_to_output_path_preserves_stem(tmp_path):
     result = map_pdf_to_output_path(pdf_path, str(output_dir))
 
     assert result.name == "file with spaces.md"
-

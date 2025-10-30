@@ -90,4 +90,3 @@ class ConversionJob:
             self.succeeded += 1
         else:
             self.failed += 1
-

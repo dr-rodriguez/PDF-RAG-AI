@@ -1,13 +1,12 @@
 """CLI entry point for PDF-to-Markdown conversion."""
 
-import json
 import sys
 from pathlib import Path
 
 import click
 
 from src.lib.io_utils import setup_logging
-from src.services.converter import convert_batch, format_job_summary, format_job_summary_json
+from src.services.converter import convert_batch, format_job_summary
 
 
 @click.group()
@@ -31,14 +30,7 @@ def cli():
     type=click.Path(file_okay=False, dir_okay=True, writable=True),
     help="Output directory for Markdown files",
 )
-@click.option(
-    "--json",
-    "json_output",
-    is_flag=True,
-    default=False,
-    help="Emit JSON summary instead of human-readable format",
-)
-def parse(input: str, output: str, json_output: bool):
+def parse(input: str, output: str):
     """
     Convert PDF files in input directory to Markdown files in output directory.
 
@@ -53,12 +45,8 @@ def parse(input: str, output: str, json_output: bool):
         job = convert_batch(input, output)
 
         # Output summary
-        if json_output:
-            summary = format_job_summary_json(job)
-            click.echo(json.dumps(summary, indent=2))
-        else:
-            summary = format_job_summary(job)
-            click.echo(summary)
+        summary = format_job_summary(job)
+        click.echo(summary)
 
         # Exit with error code if there were failures
         if job.failed > 0:
@@ -75,4 +63,3 @@ def parse(input: str, output: str, json_output: bool):
 
 if __name__ == "__main__":
     cli()
-

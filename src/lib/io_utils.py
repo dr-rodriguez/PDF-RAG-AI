@@ -119,4 +119,3 @@ def setup_logging(level: int = logging.INFO) -> None:
         format="%(levelname)s: %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-

@@ -9,7 +9,6 @@ from src.services.converter import (
     convert_batch,
     convert_single_file,
     format_job_summary,
-    format_job_summary_json,
 )
 
 
@@ -35,51 +34,8 @@ def test_convert_batch_empty_directory(tmp_path):
 
 def test_format_job_summary_empty_job():
     """Test formatting empty job summary."""
-    job = ConversionJob(
-        start_time=datetime.now(datetime.UTC), end_time=datetime.now(datetime.UTC)
-    )
+    job = ConversionJob(start_time=datetime.now(datetime.UTC), end_time=datetime.now(datetime.UTC))
     summary = format_job_summary(job)
     assert "Processed: 0" in summary
     assert "Succeeded: 0" in summary
     assert "Failed: 0" in summary
-
-
-def test_format_job_summary_json_empty_job():
-    """Test formatting empty job summary as JSON."""
-    job = ConversionJob(
-        startTime=datetime.now(datetime.UTC), endTime=datetime.now(datetime.UTC)
-    )
-    summary = format_job_summary_json(job)
-    assert summary["total"] == 0
-    assert summary["succeeded"] == 0
-    assert summary["failed"] == 0
-    assert "startTime" in summary
-    assert "endTime" in summary
-    assert "doclingVersion" in summary
-    assert summary["results"] == []
-
-
-def test_format_job_summary_json_structure():
-    """Test that JSON summary has correct structure."""
-    job = ConversionJob(
-        startTime=datetime(2025, 1, 1, 12, 0, 0),
-        endTime=datetime(2025, 1, 1, 12, 0, 5),
-        total=0,
-        succeeded=0,
-        failed=0,
-        doclingVersion="2.59.0",
-    )
-    summary = format_job_summary_json(job)
-    required_keys = [
-        "startTime",
-        "endTime",
-        "durationMs",
-        "total",
-        "succeeded",
-        "failed",
-        "doclingVersion",
-        "results",
-    ]
-    for key in required_keys:
-        assert key in summary, f"Missing required key: {key}"
-

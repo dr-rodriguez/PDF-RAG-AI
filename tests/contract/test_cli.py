@@ -1,6 +1,5 @@
 """Contract tests for CLI."""
 
-import json
 import subprocess
 import sys
 import tempfile
@@ -82,33 +81,3 @@ def test_cli_empty_input_directory():
         # Should succeed but process 0 files
         assert result.returncode == 0
         assert "Processed: 0" in result.stdout
-
-
-def test_cli_json_output():
-    """Test CLI with --json flag produces valid JSON."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        input_dir = Path(tmpdir) / "input"
-        input_dir.mkdir()
-        output_dir = Path(tmpdir) / "output"
-        result = subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "src.cli.main",
-                "--input",
-                str(input_dir),
-                "--output",
-                str(output_dir),
-                "--json",
-            ],
-            capture_output=True,
-            text=True,
-        )
-        assert result.returncode == 0
-        # Should be valid JSON
-        summary = json.loads(result.stdout)
-        assert "total" in summary
-        assert "succeeded" in summary
-        assert "failed" in summary
-        assert "results" in summary
-
