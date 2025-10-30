@@ -94,6 +94,29 @@ def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
     pdf_path = Path(input_path).resolve()
     md_path = Path(output_path).resolve()
 
+    # Check if input file exists before creating Document
+    if not pdf_path.exists():
+        # Create a Document object without validation for error reporting
+        # We bypass validation by using object.__setattr__ after creation
+        from dataclasses import fields
+
+        document_dict = {
+            "filename": pdf_path.name if pdf_path.name.endswith(".pdf") else pdf_path.name + ".pdf",
+            "path": str(pdf_path),
+            "size_bytes": None,
+        }
+        # Create Document instance and manually set attributes to bypass validation
+        document = Document.__new__(Document)
+        for field in fields(Document):
+            setattr(document, field.name, document_dict.get(field.name, field.default))
+        # Don't call __post_init__ which would validate
+
+        return ConversionResult(
+            document=document,
+            status=ConversionStatus.FAILURE,
+            message=f"Failed to read document: Document path does not exist: {str(pdf_path)}",
+        )
+
     # Create Document object
     try:
         document = Document(
@@ -102,8 +125,20 @@ def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
             size_bytes=pdf_path.stat().st_size if pdf_path.exists() else None,
         )
     except Exception as e:
+        # For other exceptions, create Document without validation for error reporting
+        from dataclasses import fields
+
+        document_dict = {
+            "filename": pdf_path.name if pdf_path.name.endswith(".pdf") else pdf_path.name + ".pdf",
+            "path": str(pdf_path),
+            "size_bytes": None,
+        }
+        document = Document.__new__(Document)
+        for field in fields(Document):
+            setattr(document, field.name, document_dict.get(field.name, field.default))
+
         return ConversionResult(
-            document=Document(filename=pdf_path.name, path=str(pdf_path)),
+            document=document,
             status=ConversionStatus.FAILURE,
             message=f"Failed to read document: {str(e)}",
         )

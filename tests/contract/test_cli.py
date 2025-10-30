@@ -20,7 +20,7 @@ def test_cli_help():
 def test_cli_missing_input():
     """Test CLI with missing --input argument."""
     result = subprocess.run(
-        [sys.executable, "-m", "src.cli.main", "--output", "/tmp"],
+        [sys.executable, "-m", "src.cli.main", "parse", "--output", "/tmp"],
         capture_output=True,
         text=True,
     )
@@ -31,7 +31,7 @@ def test_cli_missing_input():
 def test_cli_missing_output():
     """Test CLI with missing --output argument."""
     result = subprocess.run(
-        [sys.executable, "-m", "src.cli.main", "--input", "/tmp"],
+        [sys.executable, "-m", "src.cli.main", "parse", "--input", "/tmp"],
         capture_output=True,
         text=True,
     )
@@ -48,6 +48,7 @@ def test_cli_nonexistent_input():
                 sys.executable,
                 "-m",
                 "src.cli.main",
+                "parse",
                 "--input",
                 "/nonexistent",
                 "--output",
@@ -70,6 +71,7 @@ def test_cli_empty_input_directory():
                 sys.executable,
                 "-m",
                 "src.cli.main",
+                "parse",
                 "--input",
                 str(input_dir),
                 "--output",
