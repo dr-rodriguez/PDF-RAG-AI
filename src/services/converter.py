@@ -44,7 +44,6 @@ def convert_pdf_to_markdown(document: Document) -> ConversionResult:
         or error message (on failure). Note: output.path will be empty; caller should set it.
     """
     try:
-
         # Some explicit options for more control
         pipeline_options = PdfPipelineOptions()
         pipeline_options.do_ocr = True
@@ -56,9 +55,7 @@ def convert_pdf_to_markdown(document: Document) -> ConversionResult:
         )
 
         converter = DocumentConverter(
-            format_options={
-                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-            }
+            format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
         )
 
         # Convert PDF to Markdown
