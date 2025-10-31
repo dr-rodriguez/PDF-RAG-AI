@@ -40,8 +40,7 @@ Rationale: Enables isolated verification, easier debugging, and safer changes.
 
 ### IV. CLI-First with Text I/O
 Each stage MUST expose a CLI. Inputs via stdin/args; normal output to stdout;
-errors to stderr. JSON output MUST be supported; a human-readable mode SHOULD
-also be provided when feasible.
+errors to stderr.
 
 Rationale: Improves composability, scripting, and observability.
 
@@ -63,6 +62,9 @@ Rationale: Traceability for RAG quality and stable consumer contracts.
   small adapter surface.
 - Reproducibility: End-to-end runs MUST be replayable given the same inputs,
   config, and pinned dependency set.
+- Code Simplicity: Scripts MUST be kept simple and appropriate for
+  intermediate-level Python developers. Avoid over-engineering and complex
+  abstractions that hinder readability and maintainability.
 
 ## Development Workflow
 
@@ -82,4 +84,4 @@ Rationale: Traceability for RAG quality and stable consumer contracts.
 - Compliance: All PRs MUST include a Constitution Check in plans/specs where
   applicable.
 
-**Version**: 1.0.0 | **Ratified**: 2025-10-30 | **Last Amended**: 2025-10-30
+**Version**: 1.1.0 | **Ratified**: 2025-10-30 | **Last Amended**: 2025-10-30
