@@ -72,7 +72,7 @@ uv run pytest
 
 ```bash
 uv run ruff check .
-uv run black .
+uv run ruff format .
 ```
 
 ## License
