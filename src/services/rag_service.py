@@ -8,8 +8,8 @@ from pathlib import Path
 try:
     from langchain_chroma import Chroma
     from langchain_classic.chains import RetrievalQA
-    from langchain_community.embeddings import OllamaEmbeddings
-    from langchain_community.llms import Ollama
+    from langchain_ollama import OllamaEmbeddings
+    from langchain_ollama import OllamaLLM as Ollama
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 except ImportError as e:
     raise ImportError("LangChain dependencies are not installed. Please run: uv sync") from e

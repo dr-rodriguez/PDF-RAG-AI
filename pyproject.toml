@@ -14,6 +14,7 @@ dependencies = [
     "langchain-community>=0.3.0",
     "langchain-chroma>=0.1.0",
     "langchain-text-splitters>=1.0.0",
+    "langchain-ollama>=1.0.0",
     "onnxruntime>=1.23.2",
     "python-dotenv>=1.0.0",
     "rapidocr>=3.4.2",
