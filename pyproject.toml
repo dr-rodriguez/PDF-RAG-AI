@@ -9,8 +9,16 @@ dependencies = [
     "docling==2.59.0",
     "easyocr>=1.7.2",
     "huggingface-hub[hf-xet]>=0.36.0",
+    "langchain>=0.3.0",
+    "langchain-classic>=0.3.0",
+    "langchain-community>=0.3.0",
+    "langchain-chroma>=0.1.0",
+    "langchain-text-splitters>=1.0.0",
+    "langchain-ollama>=1.0.0",
     "onnxruntime>=1.23.2",
+    "python-dotenv>=1.0.0",
     "rapidocr>=3.4.2",
+    "requests>=2.31.0",
 ]
 
 [build-system]
@@ -39,7 +47,7 @@ python_functions = ["test_*"]
 addopts = "-v --tb=short"
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py313"
 
 [tool.ruff.lint]
@@ -47,7 +55,7 @@ select = ["E", "F", "I", "N", "W", "UP"]
 ignore = []
 
 [tool.black]
-line-length = 100
+line-length = 120
 target-version = ["py313"]
 
 [tool.uv]
