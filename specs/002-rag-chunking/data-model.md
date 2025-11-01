@@ -22,7 +22,7 @@
 - Attributes:
   - `location`: string (path to `data/db/` directory)
   - `store_type`: string (constant: "ChromaDB")
-  - `collection_name`: string (default: "documents" or configurable)
+  - `collection_name`: string (default: "documents", configurable via VECTOR_DB_COLLECTION_NAME environment variable)
   - `chunk_count`: integer (derived: count of chunks in store)
   - `source_documents`: set<string> (derived: unique source file paths)
 - Validation:
@@ -65,6 +65,16 @@
 - Notes:
   - Loaded from environment variables (required: embedding_model, query_model)
   - Base URL configurable but defaults to local Ollama
+
+### VectorDatabaseConfiguration
+- Attributes:
+  - `collection_name`: string (ChromaDB collection name, default: "documents")
+- Validation:
+  - Collection name must be non-empty string
+  - Collection name should be a valid identifier (alphanumeric with underscores/hyphens)
+- Notes:
+  - Loaded from environment variable VECTOR_DB_COLLECTION_NAME with default
+  - Used when initializing or connecting to ChromaDB collection
 
 ### Query
 - Attributes:
@@ -123,7 +133,7 @@
 - A `DocumentChunk` references exactly one source file (via `source_file` attribute).
 - A `Query` is processed against a `VectorDatabase` to produce a `QueryResponse`.
 - A `ProcessingJob` processes many source files and produces many `ProcessingResult`s.
-- `ChunkingConfiguration`, `RetrievalConfiguration`, and `ModelConfiguration` are singleton configuration objects used by processing and query operations.
+- `ChunkingConfiguration`, `RetrievalConfiguration`, `ModelConfiguration`, and `VectorDatabaseConfiguration` are singleton configuration objects used by processing and query operations.
 
 ## State Transitions
 

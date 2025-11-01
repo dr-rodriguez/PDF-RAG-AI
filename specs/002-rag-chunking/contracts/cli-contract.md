@@ -101,6 +101,7 @@ What is the main topic of the documents?
 - `RETRIEVER_TOP_K`: Number of top chunks to retrieve (default: `4`)
 - `RETRIEVER_MIN_SIMILARITY`: Minimum similarity threshold 0.0-1.0 (default: `0.0`)
 - `OLLAMA_BASE_URL`: Ollama API base URL (default: `http://localhost:11434`)
+- `VECTOR_DB_COLLECTION_NAME`: ChromaDB collection name (default: `documents`)
 
 ### Example `.env` file
 ```env
@@ -110,5 +111,6 @@ CHUNK_SIZE=1000
 CHUNK_OVERLAP=200
 RETRIEVER_TOP_K=4
 RETRIEVER_MIN_SIMILARITY=0.0
+VECTOR_DB_COLLECTION_NAME=documents
 ```
 

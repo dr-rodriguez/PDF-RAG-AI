@@ -24,7 +24,7 @@ Implement RAG (Retrieval-Augmented Generation) functionality to chunk Markdown f
 **Target Platform**: Local execution on Windows/macOS/Linux (Ollama must be running locally)  
 **Project Type**: Single project (CLI-first utilities and services)  
 **Performance Goals**: Process 500-5000 line Markdown file in under 2 minutes; query responses in under 5 seconds  
-**Constraints**: Must use local Ollama models (no remote API calls); chunk size and overlap configurable via env vars with defaults; minimum similarity threshold for retrieval  
+**Constraints**: Must use local Ollama models (no remote API calls); chunk size, overlap, and vector database collection name configurable via env vars with defaults; minimum similarity threshold for retrieval  
 **Scale/Scope**: Handle 10+ Markdown files (50,000+ lines) in single database; support thousands of chunks per document
 
 ## Constitution Check

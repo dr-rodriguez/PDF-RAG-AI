@@ -85,7 +85,7 @@ As a user, I can configure which embedding and query models to use, chunk size a
 
 - **FR-001**: The system MUST provide a CLI command to process Markdown files, chunk their content, generate embeddings, and store them in a vector database.
 - **FR-002**: The system MUST provide a CLI command to query the vector database using natural language questions and return answers based on stored content. The system MUST retrieve the top K chunks that exceed a minimum similarity threshold for generating answers.
-- **FR-003**: The system MUST read model configuration (embedding model and query model names), chunking parameters (chunk size and overlap), and retrieval parameters (top K count and minimum similarity threshold) from environment variables loaded from a `.env` file in the project root.
+- **FR-003**: The system MUST read model configuration (embedding model and query model names), chunking parameters (chunk size and overlap), retrieval parameters (top K count and minimum similarity threshold), and vector database configuration (collection name) from environment variables loaded from a `.env` file in the project root.
 - **FR-004**: The system MUST use local Ollama models for both embedding generation and query processing.
 - **FR-005**: The system MUST chunk Markdown content using fixed-size chunks with overlap between adjacent chunks to preserve semantic meaning and context across chunk boundaries.
 - **FR-006**: The system MUST persist the vector database to disk in `data/db/` so that it remains available between command invocations.

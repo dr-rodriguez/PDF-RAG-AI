@@ -41,6 +41,7 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 - [ ] T005 Create ModelConfiguration dataclass in src/models/types.py with embedding_model, query_model, ollama_base_url attributes
 - [ ] T006 [P] Create ChunkingConfiguration dataclass in src/models/types.py with chunk_size and chunk_overlap attributes
 - [ ] T007 [P] Create RetrievalConfiguration dataclass in src/models/types.py with top_k and min_similarity attributes
+- [ ] T007a [P] Create VectorDatabaseConfiguration dataclass in src/models/types.py with collection_name attribute (default: "documents")
 - [ ] T008 Implement configuration loading utility in src/lib/config.py to load environment variables from .env file with validation and defaults
 - [ ] T009 [P] Implement Ollama connection validation utility in src/lib/ollama_utils.py to check model availability
 
@@ -61,7 +62,7 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 - [ ] T012 [US1] Create ProcessingResult dataclass in src/models/types.py with source_file, status, chunks_added, chunks_skipped, message, processing_time_ms attributes
 - [ ] T013 [US1] Create ProcessingJob dataclass in src/models/types.py with start_time, end_time, total_files, succeeded, failed, total_chunks_added, results attributes
 - [ ] T014 [US1] Implement chunking function in src/services/rag_service.py using RecursiveCharacterTextSplitter with configurable chunk size and overlap. Note: Fixed-size chunking with overlap is deterministic (no randomness), satisfying Constitution Principle III requirement for seedable/deterministic chunking
-- [ ] T015 [US1] Implement vector database initialization in src/services/rag_service.py to create or load ChromaDB collection in data/db/
+- [ ] T015 [US1] Implement vector database initialization in src/services/rag_service.py to create or load ChromaDB collection in data/db/ using collection name from configuration (defaults to "documents" until US3 config loader is integrated)
 - [ ] T016 [US1] Implement embedding generation function in src/services/rag_service.py using OllamaEmbeddings from langchain_community with configured model. Include error handling for Ollama model unavailability (validated via T009, error handling integrated in T022)
 - [ ] T017 [US1] Implement chunk deduplication logic in src/services/rag_service.py to check if chunk content + source_file already exists before adding
 - [ ] T018 [US1] Implement process_file function in src/services/rag_service.py to process a single Markdown file: read, chunk, embed, deduplicate, and store in vector database
@@ -108,9 +109,11 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 - [ ] T033 [US3] Extend configuration loading in src/lib/config.py to load CHUNK_SIZE and CHUNK_OVERLAP from environment variables with defaults (1000, 200)
 - [ ] T034 [US3] Extend configuration loading in src/lib/config.py to load RETRIEVER_TOP_K and RETRIEVER_MIN_SIMILARITY from environment variables with defaults (4, 0.0)
 - [ ] T035 [US3] Extend configuration loading in src/lib/config.py to load OLLAMA_BASE_URL from environment variables with default (http://localhost:11434)
+- [ ] T035a [US3] Extend configuration loading in src/lib/config.py to load VECTOR_DB_COLLECTION_NAME from environment variables with default ("documents")
 - [ ] T036 [US3] Update src/services/rag_service.py to use ModelConfiguration from config loader for embedding and query model initialization
 - [ ] T037 [US3] Update src/services/rag_service.py to use ChunkingConfiguration from config loader for chunking parameters
 - [ ] T038 [US3] Update src/services/rag_service.py to use RetrievalConfiguration from config loader for retrieval parameters
+- [ ] T038a [US3] Update src/services/rag_service.py to use VectorDatabaseConfiguration from config loader for collection name when initializing ChromaDB
 - [ ] T039 [US3] Add validation error messages in src/lib/config.py for missing required environment variables (OLLAMA_EMBEDDING_MODEL, OLLAMA_QUERY_MODEL)
 - [ ] T040 [US3] Integrate Ollama model validation in src/lib/config.py to check model availability and provide clear error messages for unavailable models
 - [ ] T041 [US3] Update .env.example file with all configuration variables and example values
@@ -161,9 +164,9 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 ### Parallel Opportunities
 
 - All Setup tasks marked [P] can run in parallel
-- Foundational tasks T006, T007, T009 can run in parallel (different files)
+- Foundational tasks T006, T007, T007a, T009 can run in parallel (different files)
 - Models within US1 (T010-T013) can run in parallel (different dataclasses)
-- US3 configuration tasks (T032-T035) can run in parallel (different config sections)
+- US3 configuration tasks (T032-T035a) can run in parallel (different config sections)
 - Polish tasks marked [P] can run in parallel
 
 ---
