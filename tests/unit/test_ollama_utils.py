@@ -25,7 +25,10 @@ def test_validate_ollama_connection_success():
 
 def test_validate_ollama_connection_failure():
     """Test failed Ollama connection validation."""
-    with patch("src.lib.ollama_utils.requests.get", side_effect=requests.RequestException("Connection failed")):
+    with patch(
+        "src.lib.ollama_utils.requests.get",
+        side_effect=requests.RequestException("Connection failed"),
+    ):
         result = validate_ollama_connection()
         assert result is False
 
@@ -61,7 +64,8 @@ def test_list_available_models_success():
 def test_list_available_models_connection_error():
     """Test listing models with connection error."""
     with patch(
-        "src.lib.ollama_utils.requests.get", side_effect=requests.RequestException("Connection failed")
+        "src.lib.ollama_utils.requests.get",
+        side_effect=requests.RequestException("Connection failed"),
     ) as mock_get:
         with pytest.raises(RuntimeError, match="Failed to connect to Ollama"):
             list_available_models()
@@ -137,7 +141,8 @@ def test_validate_model_available_with_tag():
 def test_validate_model_available_connection_error():
     """Test model validation when connection fails."""
     with patch(
-        "src.lib.ollama_utils.requests.get", side_effect=requests.RequestException("Connection failed")
+        "src.lib.ollama_utils.requests.get",
+        side_effect=requests.RequestException("Connection failed"),
     ):
         result = validate_model_available("llama2")
         assert result is False
@@ -168,7 +173,8 @@ def test_get_model_validation_error_success():
 def test_get_model_validation_error_connection_failed():
     """Test getting validation error when connection fails."""
     with patch(
-        "src.lib.ollama_utils.requests.get", side_effect=requests.RequestException("Connection failed")
+        "src.lib.ollama_utils.requests.get",
+        side_effect=requests.RequestException("Connection failed"),
     ):
         error_msg = get_model_validation_error("test-model", "http://localhost:11434")
         assert "Cannot connect to Ollama" in error_msg
@@ -190,4 +196,3 @@ def test_get_model_validation_error_truncates_long_lists():
         # Should show first 10 and indicate total
         assert "model0" in error_msg
         assert "15 total" in error_msg
-

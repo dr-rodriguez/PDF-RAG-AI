@@ -141,8 +141,7 @@ def process(path: str, db_path: str):
                 )
             else:
                 output_lines.append(
-                    f"- {Path(result.source_file).name}: "
-                    f"ERROR: {result.message or 'Unknown error'}"
+                    f"- {Path(result.source_file).name}: ERROR: {result.message or 'Unknown error'}"
                 )
 
         if output_lines:
@@ -202,6 +201,31 @@ def query_cmd(query_text: str, db_path: str):
             click.echo(f"Error: {str(e)}", err=True)
             sys.exit(1)
 
+        # Validate database path exists (check before model validation for better error messages)
+        db_path_obj = Path(db_path)
+        if not db_path_obj.exists():
+            click.echo(
+                f"Error: Vector database not found at '{db_path}'. Run 'pdf-rag process' first.",
+                err=True,
+            )
+            sys.exit(1)
+
+        # Check if database directory is empty or uninitialized
+        # ChromaDB creates chroma.sqlite3 or collection directories when initialized
+        db_files = list(db_path_obj.iterdir())
+        is_empty_db = len(db_files) == 0
+        # Check for ChromaDB signature files
+        has_chromadb_files = any(
+            f.name == "chroma.sqlite3" or (f.is_dir() and f.name.startswith("chroma"))
+            for f in db_files
+        )
+        if is_empty_db or not has_chromadb_files:
+            click.echo(
+                "Error: Vector database is empty. Process some documents first.",
+                err=True,
+            )
+            sys.exit(1)
+
         # Validate Ollama connection
         if not validate_ollama_connection(model_config.ollama_base_url):
             click.echo(
@@ -217,15 +241,6 @@ def query_cmd(query_text: str, db_path: str):
                 model_config.query_model, model_config.ollama_base_url
             )
             click.echo(f"Error: {error_msg}", err=True)
-            sys.exit(1)
-
-        # Validate database path exists
-        db_path_obj = Path(db_path)
-        if not db_path_obj.exists():
-            click.echo(
-                f"Error: Vector database not found at '{db_path}'. Run 'pdf-rag process' first.",
-                err=True,
-            )
             sys.exit(1)
 
         # Create query object and process

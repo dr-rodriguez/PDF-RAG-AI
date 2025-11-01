@@ -1,9 +1,44 @@
 """Contract tests for CLI."""
 
+import os
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
+
+
+def get_minimal_env():
+    """Get minimal environment with OLLAMA vars set to empty to prevent .env loading."""
+    # Set OLLAMA vars to empty strings so they exist but are empty.
+    # This prevents load_config from loading .env file (since vars exist)
+    # but causes it to raise ValueError because they're empty.
+    minimal_env = {}
+    # Set OLLAMA vars to empty to block .env loading
+    minimal_env["OLLAMA_EMBEDDING_MODEL"] = ""
+    minimal_env["OLLAMA_QUERY_MODEL"] = ""
+    # Include essential vars for Python to work
+    if "PATH" in os.environ:
+        minimal_env["PATH"] = os.environ["PATH"]
+    # On Windows, include SYSTEMROOT and USERPROFILE for Python to work properly
+    if sys.platform == "win32":
+        if "SYSTEMROOT" in os.environ:
+            minimal_env["SYSTEMROOT"] = os.environ["SYSTEMROOT"]
+        if "USERPROFILE" in os.environ:
+            minimal_env["USERPROFILE"] = os.environ["USERPROFILE"]
+    else:
+        # Unix-like systems
+        if "HOME" in os.environ:
+            minimal_env["HOME"] = os.environ["HOME"]
+    return minimal_env
+
+
+def get_test_env_with_ollama():
+    """Get minimal environment with OLLAMA vars set for tests that need them."""
+    env = get_minimal_env()
+    # Override OLLAMA vars with test values
+    env["OLLAMA_EMBEDDING_MODEL"] = "test"
+    env["OLLAMA_QUERY_MODEL"] = "test"
+    return env
 
 
 def test_cli_help():
@@ -100,7 +135,7 @@ def test_cli_process_missing_config():
             ],
             capture_output=True,
             text=True,
-            env={},  # Clear environment
+            env=get_minimal_env(),  # Minimal environment without app vars
         )
         assert result.returncode != 0
         assert "Missing required environment variable" in result.stderr
@@ -118,7 +153,7 @@ def test_cli_process_nonexistent_path():
         ],
         capture_output=True,
         text=True,
-        env={"OLLAMA_EMBEDDING_MODEL": "test", "OLLAMA_QUERY_MODEL": "test"},
+        env=get_test_env_with_ollama(),
     )
     assert result.returncode != 0
     assert "Path does not exist" in result.stderr
@@ -136,7 +171,7 @@ def test_cli_query_missing_config():
         ],
         capture_output=True,
         text=True,
-        env={},  # Clear environment
+        env=get_minimal_env(),  # Minimal environment without app vars
     )
     assert result.returncode != 0
     assert "Missing required environment variable" in result.stderr
@@ -159,10 +194,10 @@ def test_cli_query_empty_database(tmp_path):
         ],
         capture_output=True,
         text=True,
-        env={"OLLAMA_EMBEDDING_MODEL": "test", "OLLAMA_QUERY_MODEL": "test"},
+        env=get_test_env_with_ollama(),
     )
     assert result.returncode != 0
-    assert ("Vector database not found" in result.stderr or "empty" in result.stderr.lower())
+    assert "Vector database not found" in result.stderr or "empty" in result.stderr.lower()
 
 
 def test_cli_query_nonexistent_database():
@@ -179,7 +214,7 @@ def test_cli_query_nonexistent_database():
         ],
         capture_output=True,
         text=True,
-        env={"OLLAMA_EMBEDDING_MODEL": "test", "OLLAMA_QUERY_MODEL": "test"},
+        env=get_test_env_with_ollama(),
     )
     assert result.returncode != 0
     assert "Vector database not found" in result.stderr

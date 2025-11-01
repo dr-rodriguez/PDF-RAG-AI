@@ -81,10 +81,6 @@ def get_model_validation_error(model_name: str, base_url: str = "http://localhos
         available_list = ", ".join(available_models[:10])  # Show first 10
         if len(available_models) > 10:
             available_list += f", ... ({len(available_models)} total)"
-        return (
-            f"Ollama model '{model_name}' not found. "
-            f"Available models: {available_list}"
-        )
+        return f"Ollama model '{model_name}' not found. Available models: {available_list}"
     except RuntimeError as e:
         return f"Cannot connect to Ollama at {base_url}. {str(e)}"
-
