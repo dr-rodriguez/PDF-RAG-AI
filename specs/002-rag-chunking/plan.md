@@ -31,15 +31,17 @@ Implement RAG (Retrieval-Augmented Generation) functionality to chunk Markdown f
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-**Note**: Constitution file (`.specify/memory/constitution.md`) not found in repository. Applying common best practices based on project patterns from previous features:
+**Constitution Reference**: `.specify/memory/constitution.md` v1.1.0
 
-- CLI-first with text I/O: PASS (planned CLI commands for processing and querying)
-- Testable, stage-oriented pipeline: PASS (processing and querying are distinct stages)
-- Observability and provenance: PASS (source file tracking in chunks; structured logging)
-- Local execution defaults: PASS (local Ollama models, local vector database)
-- Deterministic dependencies: PASS (will pin LangChain and vector store versions)
+**Validation against Core Principles:**
 
-Gate evaluation: PASS. Design follows established patterns from feature 001-setup-docling.
+- **Principle I (Deterministic PDF Parsing)**: N/A (this feature processes Markdown files, not PDFs)
+- **Principle II (Local LLM Execution with Ollama)**: PASS (uses local Ollama models for embeddings and queries, configurable via .env, no remote calls by default)
+- **Principle III (Testable, Stage-Oriented Pipeline)**: PASS (pipeline stages: chunk → embed → index → query; fixed-size chunking is deterministic; each stage has unit/integration tests in tasks)
+- **Principle IV (CLI-First with Text I/O)**: PASS (CLI commands for `process` and `query` with text I/O via args/stdout/stderr)
+- **Principle V (Observability and Versioning)**: PASS (structured logs with stage, timing, counts via T043; chunk provenance via source_file tracking; CLI contracts follow semantic versioning)
+
+Gate evaluation: PASS. Design complies with constitution principles.
 
 **Post-Design Re-evaluation**:
 - CLI commands (`process` and `query`) implemented with human-readable output
