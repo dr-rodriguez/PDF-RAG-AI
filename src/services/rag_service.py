@@ -6,15 +6,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 try:
-    from langchain.chains import RetrievalQA
-    from langchain.text_splitter import RecursiveCharacterTextSplitter
     from langchain_chroma import Chroma
+    from langchain_classic.chains import RetrievalQA
     from langchain_community.embeddings import OllamaEmbeddings
     from langchain_community.llms import Ollama
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
 except ImportError as e:
-    raise ImportError(
-        "LangChain dependencies are not installed. Please run: uv sync"
-    ) from e
+    raise ImportError("LangChain dependencies are not installed. Please run: uv sync") from e
 
 from src.lib.ollama_utils import get_model_validation_error, validate_model_available
 from src.models.types import (
@@ -32,9 +30,7 @@ from src.models.types import (
 logger = logging.getLogger(__name__)
 
 
-def chunk_text(
-    text: str, config: ChunkingConfiguration
-) -> list[str]:
+def chunk_text(text: str, config: ChunkingConfiguration) -> list[str]:
     """
     Chunk text using RecursiveCharacterTextSplitter.
 
@@ -310,7 +306,8 @@ def process_batch(
             markdown_files = [path_obj]
     elif path_obj.is_dir():
         # Directory: find all .md files (case-insensitive)
-        markdown_files = list(path_obj.glob("*.md")) + list(path_obj.glob("*.MD"))
+        # Use a set to deduplicate in case glob patterns overlap on case-insensitive filesystems
+        markdown_files = list(set(path_obj.glob("*.md")) | set(path_obj.glob("*.MD")))
     else:
         # Path doesn't exist
         job.end_time = datetime.now(UTC)
@@ -376,7 +373,9 @@ def setup_vector_retriever(
     # Load vector store
     db_dir = Path(db_path)
     if not db_dir.exists():
-        raise RuntimeError(f"Vector database not found at '{db_path}'. Run 'pdf-rag process' first.")
+        raise RuntimeError(
+            f"Vector database not found at '{db_path}'. Run 'pdf-rag process' first."
+        )
 
     try:
         vector_store = Chroma(
@@ -393,9 +392,7 @@ def setup_vector_retriever(
         raise RuntimeError("Vector database is empty. Process some documents first.")
 
     # Create retriever with top_k
-    retriever = vector_store.as_retriever(
-        search_kwargs={"k": retrieval_config.top_k}
-    )
+    retriever = vector_store.as_retriever(search_kwargs={"k": retrieval_config.top_k})
 
     return retriever, vector_store
 
@@ -543,4 +540,3 @@ def query(
         retrieval_config,
         vector_db_config,
     )
-

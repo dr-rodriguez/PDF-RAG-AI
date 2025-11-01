@@ -237,6 +237,15 @@ class ProcessingJob:
         delta = self.end_time - self.start_time
         return int(delta.total_seconds() * 1000)
 
+    def add_result(self, result: ProcessingResult) -> None:
+        """Add a processing result and update counters."""
+        self.results.append(result)
+        self.total_chunks_added += result.chunks_added
+        if result.status == ProcessingStatus.SUCCESS:
+            self.succeeded += 1
+        else:
+            self.failed += 1
+
 
 # RAG Query Models
 
