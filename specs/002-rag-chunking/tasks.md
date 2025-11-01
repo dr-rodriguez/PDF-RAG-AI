@@ -25,10 +25,10 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 
 **Purpose**: Project initialization and dependency management
 
-- [ ] T001 Add LangChain dependencies to pyproject.toml (langchain, langchain-community, langchain-chroma)
-- [ ] T002 [P] Add python-dotenv dependency to pyproject.toml for environment variable management
-- [ ] T003 [P] Create data/db/ directory structure for vector database persistence
-- [ ] T004 [P] Create .env.example file in project root with required configuration variables
+- [X] T001 Add LangChain dependencies to pyproject.toml (langchain, langchain-community, langchain-chroma)
+- [X] T002 [P] Add python-dotenv dependency to pyproject.toml for environment variable management
+- [X] T003 [P] Create data/db/ directory structure for vector database persistence
+- [X] T004 [P] Create .env.example file in project root with required configuration variables
 
 ---
 
@@ -38,12 +38,12 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Create ModelConfiguration dataclass in src/models/types.py with embedding_model, query_model, ollama_base_url attributes
-- [ ] T006 [P] Create ChunkingConfiguration dataclass in src/models/types.py with chunk_size and chunk_overlap attributes
-- [ ] T007 [P] Create RetrievalConfiguration dataclass in src/models/types.py with top_k and min_similarity attributes
-- [ ] T007a [P] Create VectorDatabaseConfiguration dataclass in src/models/types.py with collection_name attribute (default: "documents")
-- [ ] T008 Implement configuration loading utility in src/lib/config.py to load environment variables from .env file with validation and defaults
-- [ ] T009 [P] Implement Ollama connection validation utility in src/lib/ollama_utils.py to check model availability
+- [X] T005 Create ModelConfiguration dataclass in src/models/types.py with embedding_model, query_model, ollama_base_url attributes
+- [X] T006 [P] Create ChunkingConfiguration dataclass in src/models/types.py with chunk_size and chunk_overlap attributes
+- [X] T007 [P] Create RetrievalConfiguration dataclass in src/models/types.py with top_k and min_similarity attributes
+- [X] T007a [P] Create VectorDatabaseConfiguration dataclass in src/models/types.py with collection_name attribute (default: "documents")
+- [X] T008 Implement configuration loading utility in src/lib/config.py to load environment variables from .env file with validation and defaults
+- [X] T009 [P] Implement Ollama connection validation utility in src/lib/ollama_utils.py to check model availability
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -57,19 +57,19 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Create DocumentChunk dataclass in src/models/types.py with id, content, source_file, chunk_index, embedding, metadata attributes
-- [ ] T011 [US1] Create VectorDatabase dataclass in src/models/types.py with location, store_type, collection_name attributes
-- [ ] T012 [US1] Create ProcessingResult dataclass in src/models/types.py with source_file, status, chunks_added, chunks_skipped, message, processing_time_ms attributes
-- [ ] T013 [US1] Create ProcessingJob dataclass in src/models/types.py with start_time, end_time, total_files, succeeded, failed, total_chunks_added, results attributes
-- [ ] T014 [US1] Implement chunking function in src/services/rag_service.py using RecursiveCharacterTextSplitter with configurable chunk size and overlap. Note: Fixed-size chunking with overlap is deterministic (no randomness), satisfying Constitution Principle III requirement for seedable/deterministic chunking
-- [ ] T015 [US1] Implement vector database initialization in src/services/rag_service.py to create or load ChromaDB collection in data/db/ using collection name from configuration (defaults to "documents" until US3 config loader is integrated)
-- [ ] T016 [US1] Implement embedding generation function in src/services/rag_service.py using OllamaEmbeddings from langchain_community with configured model. Include error handling for Ollama model unavailability (validated via T009, error handling integrated in T022)
-- [ ] T017 [US1] Implement chunk deduplication logic in src/services/rag_service.py to check if chunk content + source_file already exists before adding
-- [ ] T018 [US1] Implement process_file function in src/services/rag_service.py to process a single Markdown file: read, chunk, embed, deduplicate, and store in vector database
-- [ ] T019 [US1] Implement process_batch function in src/services/rag_service.py to process multiple Markdown files from a directory path
-- [ ] T020 [US1] Add process command to src/cli/main.py CLI with PATH argument (file or directory) and optional --db-path flag, integrating with rag_service
-- [ ] T021 [US1] Implement output formatting for process command in src/cli/main.py to display file-by-file results and summary statistics
-- [ ] T022 [US1] Add error handling for process command in src/cli/main.py for missing paths, I/O errors, missing configuration, and Ollama model unavailability
+- [X] T010 [US1] Create DocumentChunk dataclass in src/models/types.py with id, content, source_file, chunk_index, embedding, metadata attributes
+- [X] T011 [US1] Create VectorDatabase dataclass in src/models/types.py with location, store_type, collection_name attributes
+- [X] T012 [US1] Create ProcessingResult dataclass in src/models/types.py with source_file, status, chunks_added, chunks_skipped, message, processing_time_ms attributes
+- [X] T013 [US1] Create ProcessingJob dataclass in src/models/types.py with start_time, end_time, total_files, succeeded, failed, total_chunks_added, results attributes
+- [X] T014 [US1] Implement chunking function in src/services/rag_service.py using RecursiveCharacterTextSplitter with configurable chunk size and overlap. Note: Fixed-size chunking with overlap is deterministic (no randomness), satisfying Constitution Principle III requirement for seedable/deterministic chunking
+- [X] T015 [US1] Implement vector database initialization in src/services/rag_service.py to create or load ChromaDB collection in data/db/ using collection name from configuration (defaults to "documents" until US3 config loader is integrated)
+- [X] T016 [US1] Implement embedding generation function in src/services/rag_service.py using OllamaEmbeddings from langchain_community with configured model. Include error handling for Ollama model unavailability (validated via T009, error handling integrated in T022)
+- [X] T017 [US1] Implement chunk deduplication logic in src/services/rag_service.py to check if chunk content + source_file already exists before adding
+- [X] T018 [US1] Implement process_file function in src/services/rag_service.py to process a single Markdown file: read, chunk, embed, deduplicate, and store in vector database
+- [X] T019 [US1] Implement process_batch function in src/services/rag_service.py to process multiple Markdown files from a directory path
+- [X] T020 [US1] Add process command to src/cli/main.py CLI with PATH argument (file or directory) and optional --db-path flag, integrating with rag_service
+- [X] T021 [US1] Implement output formatting for process command in src/cli/main.py to display file-by-file results and summary statistics
+- [X] T022 [US1] Add error handling for process command in src/cli/main.py for missing paths, I/O errors, missing configuration, and Ollama model unavailability
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -83,15 +83,15 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Create Query dataclass in src/models/types.py with text and timestamp attributes
-- [ ] T024 [US2] Create QueryResponse dataclass in src/models/types.py with answer and retrieved_chunks attributes
-- [ ] T025 [US2] Implement vector database retriever setup in src/services/rag_service.py using ChromaDB retriever with configurable top_k and similarity filtering
-- [ ] T026 [US2] Implement query processing function in src/services/rag_service.py using LangChain RetrievalQA chain with Ollama LLM for answer generation
-- [ ] T027 [US2] Implement similarity threshold filtering in src/services/rag_service.py to only return chunks exceeding min_similarity threshold
-- [ ] T028 [US2] Implement query function in src/services/rag_service.py to process a natural language query and return answer text only (no source metadata)
-- [ ] T029 [US2] Add query command to src/cli/main.py CLI with QUERY_TEXT argument and optional --db-path flag
-- [ ] T030 [US2] Implement output formatting for query command in src/cli/main.py to display only the generated answer text
-- [ ] T031 [US2] Add error handling for query command in src/cli/main.py for empty database, missing configuration, Ollama model unavailability, and no relevant chunks found
+- [X] T023 [US2] Create Query dataclass in src/models/types.py with text and timestamp attributes
+- [X] T024 [US2] Create QueryResponse dataclass in src/models/types.py with answer and retrieved_chunks attributes
+- [X] T025 [US2] Implement vector database retriever setup in src/services/rag_service.py using ChromaDB retriever with configurable top_k and similarity filtering
+- [X] T026 [US2] Implement query processing function in src/services/rag_service.py using LangChain RetrievalQA chain with Ollama LLM for answer generation
+- [X] T027 [US2] Implement similarity threshold filtering in src/services/rag_service.py to only return chunks exceeding min_similarity threshold
+- [X] T028 [US2] Implement query function in src/services/rag_service.py to process a natural language query and return answer text only (no source metadata)
+- [X] T029 [US2] Add query command to src/cli/main.py CLI with QUERY_TEXT argument and optional --db-path flag
+- [X] T030 [US2] Implement output formatting for query command in src/cli/main.py to display only the generated answer text
+- [X] T031 [US2] Add error handling for query command in src/cli/main.py for empty database, missing configuration, Ollama model unavailability, and no relevant chunks found
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -105,18 +105,18 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Extend configuration loading in src/lib/config.py to load OLLAMA_EMBEDDING_MODEL and OLLAMA_QUERY_MODEL from environment variables with validation
-- [ ] T033 [US3] Extend configuration loading in src/lib/config.py to load CHUNK_SIZE and CHUNK_OVERLAP from environment variables with defaults (1000, 200)
-- [ ] T034 [US3] Extend configuration loading in src/lib/config.py to load RETRIEVER_TOP_K and RETRIEVER_MIN_SIMILARITY from environment variables with defaults (4, 0.0)
-- [ ] T035 [US3] Extend configuration loading in src/lib/config.py to load OLLAMA_BASE_URL from environment variables with default (http://localhost:11434)
-- [ ] T035a [US3] Extend configuration loading in src/lib/config.py to load VECTOR_DB_COLLECTION_NAME from environment variables with default ("documents")
-- [ ] T036 [US3] Update src/services/rag_service.py to use ModelConfiguration from config loader for embedding and query model initialization
-- [ ] T037 [US3] Update src/services/rag_service.py to use ChunkingConfiguration from config loader for chunking parameters
-- [ ] T038 [US3] Update src/services/rag_service.py to use RetrievalConfiguration from config loader for retrieval parameters
-- [ ] T038a [US3] Update src/services/rag_service.py to use VectorDatabaseConfiguration from config loader for collection name when initializing ChromaDB
-- [ ] T039 [US3] Add validation error messages in src/lib/config.py for missing required environment variables (OLLAMA_EMBEDDING_MODEL, OLLAMA_QUERY_MODEL)
-- [ ] T040 [US3] Integrate Ollama model validation in src/lib/config.py to check model availability and provide clear error messages for unavailable models
-- [ ] T041 [US3] Update .env.example file with all configuration variables and example values
+- [X] T032 [US3] Extend configuration loading in src/lib/config.py to load OLLAMA_EMBEDDING_MODEL and OLLAMA_QUERY_MODEL from environment variables with validation
+- [X] T033 [US3] Extend configuration loading in src/lib/config.py to load CHUNK_SIZE and CHUNK_OVERLAP from environment variables with defaults (1000, 200)
+- [X] T034 [US3] Extend configuration loading in src/lib/config.py to load RETRIEVER_TOP_K and RETRIEVER_MIN_SIMILARITY from environment variables with defaults (4, 0.0)
+- [X] T035 [US3] Extend configuration loading in src/lib/config.py to load OLLAMA_BASE_URL from environment variables with default (http://localhost:11434)
+- [X] T035a [US3] Extend configuration loading in src/lib/config.py to load VECTOR_DB_COLLECTION_NAME from environment variables with default ("documents")
+- [X] T036 [US3] Update src/services/rag_service.py to use ModelConfiguration from config loader for embedding and query model initialization
+- [X] T037 [US3] Update src/services/rag_service.py to use ChunkingConfiguration from config loader for chunking parameters
+- [X] T038 [US3] Update src/services/rag_service.py to use RetrievalConfiguration from config loader for retrieval parameters
+- [X] T038a [US3] Update src/services/rag_service.py to use VectorDatabaseConfiguration from config loader for collection name when initializing ChromaDB
+- [X] T039 [US3] Add validation error messages in src/lib/config.py for missing required environment variables (OLLAMA_EMBEDDING_MODEL, OLLAMA_QUERY_MODEL)
+- [X] T040 [US3] Integrate Ollama model validation in src/lib/config.py to check model availability and provide clear error messages for unavailable models
+- [X] T041 [US3] Update .env.example file with all configuration variables and example values
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -126,10 +126,10 @@ description: "Task list for RAG Vector Database with Chunking feature implementa
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T042 [P] Add comprehensive error messages throughout src/cli/main.py for all error cases per CLI contract
-- [ ] T043 [P] Add structured logging for RAG operations in src/services/rag_service.py with stage, timing, and counts (chunks, tokens) per Constitution Principle V for observability and debugging
-- [ ] T044 [P] Update README.md with usage instructions for process and query commands
-- [ ] T045 Code cleanup and refactoring across all RAG components
+- [X] T042 [P] Add comprehensive error messages throughout src/cli/main.py for all error cases per CLI contract
+- [X] T043 [P] Add structured logging for RAG operations in src/services/rag_service.py with stage, timing, and counts (chunks, tokens) per Constitution Principle V for observability and debugging
+- [X] T044 [P] Update README.md with usage instructions for process and query commands
+- [X] T045 Code cleanup and refactoring across all RAG components
 - [ ] T046 Run quickstart.md validation to ensure all scenarios work end-to-end
 - [ ] T047 Add performance validation: verify processing time for 500-5000 line file is under 2 minutes (validates SC-001). Consider validating incrementally during US1 implementation
 - [ ] T048 Add performance validation: verify query responses are returned in under 5 seconds (validates SC-002). Consider validating incrementally during US2 implementation
