@@ -115,7 +115,7 @@ def convert_pdf_to_markdown(document: Document, page_number: int = 2) -> Convers
         else:
             error_msg = f"Docling parsing error: {error_msg}"
 
-        logger.error(f"Failed to convert {document.filename}: {error_msg}")
+        logger.error(f"Failed to convert page {page_number} of {document.filename}: {error_msg}")
         return ConversionResult(
             document=document,
             status=ConversionStatus.FAILURE,
@@ -205,6 +205,7 @@ def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
     last_output = None
 
     for page_num in range(1, num_pages + 1):
+        logger.info(f"Converting page {page_num}/{num_pages} of {document.filename}")
         # Convert this page
         conversion_result = convert_pdf_to_markdown(document, page_number=page_num)
 
