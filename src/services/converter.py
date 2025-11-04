@@ -1,6 +1,7 @@
 """PDF to Markdown conversion service using Docling."""
 
 import logging
+from dataclasses import fields
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -11,6 +12,11 @@ try:
     from docling.document_converter import DocumentConverter, PdfFormatOption
 except ImportError as e:
     raise ImportError("Docling is not installed. Please run: uv sync") from e
+
+try:
+    from pypdf import PdfReader
+except ImportError as e:
+    raise ImportError("pypdf is not installed. Please run: uv sync") from e
 
 from src.lib.io_utils import map_pdf_to_output_path
 from src.models.types import (
@@ -32,12 +38,33 @@ except (ImportError, AttributeError):
 logger = logging.getLogger(__name__)
 
 
-def convert_pdf_to_markdown(document: Document) -> ConversionResult:
+def get_pdf_page_count(pdf_path: Path) -> int:
+    """
+    Get the total number of pages in a PDF file.
+
+    Args:
+        pdf_path: Path to the PDF file
+
+    Returns:
+        Total number of pages in the PDF
+
+    Raises:
+        Exception: If PDF cannot be read or is corrupted
+    """
+    try:
+        reader = PdfReader(str(pdf_path))
+        return len(reader.pages)
+    except Exception as e:
+        raise Exception(f"Failed to read PDF page count: {str(e)}") from e
+
+
+def convert_pdf_to_markdown(document: Document, page_number: int = 2) -> ConversionResult:
     """
     Convert a single PDF document to Markdown using Docling.
 
     Args:
         document: Document object representing the source PDF
+        page_number: Page number to convert
 
     Returns:
         ConversionResult with status, markdown content accessible via output (on success),
@@ -59,8 +86,11 @@ def convert_pdf_to_markdown(document: Document) -> ConversionResult:
         )
 
         # Convert PDF to Markdown
-        result = converter.convert(str(document.path))
+        result = converter.convert(str(document.path), page_range=(page_number,page_number))
         md_content = result.document.export_to_markdown()
+
+        # Strip some characters
+        md_content = md_content.replace("<!-- image -->", "")
 
         # Return success result with markdown content
         # Note: output.path is empty, caller should set it when writing file
@@ -68,7 +98,7 @@ def convert_pdf_to_markdown(document: Document) -> ConversionResult:
             document=document,
             status=ConversionStatus.SUCCESS,
             output=OutputArtifact(
-                filename=Path(document.path).stem + ".md",
+                filename=Path(document.path).stem + f"_page-{page_number}.md",
                 path="",  # Will be set by caller when writing file
                 source_document=document,
             ),
@@ -95,14 +125,14 @@ def convert_pdf_to_markdown(document: Document) -> ConversionResult:
 
 def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
     """
-    Convert a single PDF file to Markdown.
+    Convert a single PDF file to Markdown, generating one markdown file per page.
 
     Args:
         input_path: Path to source PDF file
-        output_path: Path where Markdown output should be written
+        output_path: Path where Markdown output should be written (base path, actual files will be {stem}_page-{num}.md)
 
     Returns:
-        ConversionResult with conversion status and details
+        ConversionResult with conversion status and details. On success, represents processing of all pages.
     """
     pdf_path = Path(input_path).resolve()
     md_path = Path(output_path).resolve()
@@ -111,7 +141,6 @@ def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
     if not pdf_path.exists():
         # Create a Document object without validation for error reporting
         # We bypass validation by using object.__setattr__ after creation
-        from dataclasses import fields
 
         document_dict = {
             "filename": pdf_path.name if pdf_path.name.endswith(".pdf") else pdf_path.name + ".pdf",
@@ -139,7 +168,6 @@ def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
         )
     except Exception as e:
         # For other exceptions, create Document without validation for error reporting
-        from dataclasses import fields
 
         document_dict = {
             "filename": pdf_path.name if pdf_path.name.endswith(".pdf") else pdf_path.name + ".pdf",
@@ -157,46 +185,90 @@ def convert_single_file(input_path: str, output_path: str) -> ConversionResult:
         )
 
     # Ensure output directory exists
-    md_path.parent.mkdir(parents=True, exist_ok=True)
+    output_dir = md_path.parent
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Convert PDF to Markdown using the conversion function
-    conversion_result = convert_pdf_to_markdown(document)
-
-    # If conversion failed, return early
-    if conversion_result.status == ConversionStatus.FAILURE:
-        return conversion_result
-
-    # Extract markdown content (stored temporarily in message field)
-    md_content = conversion_result.message or ""
-
-    # Write to output file (overwrite by default)
+    # Get total page count
     try:
-        md_path.write_text(md_content, encoding="utf-8")
-
-        # Update result with actual output artifact and clear temporary message
-        return ConversionResult(
-            document=document,
-            status=ConversionStatus.SUCCESS,
-            output=OutputArtifact(
-                filename=md_path.name,
-                path=str(md_path),
-                size_bytes=md_path.stat().st_size if md_path.exists() else None,
-                source_document=document,
-            ),
-            message=None,  # Clear temporary storage
-        )
-
+        num_pages = get_pdf_page_count(pdf_path)
     except Exception as e:
         return ConversionResult(
             document=document,
             status=ConversionStatus.FAILURE,
-            message=f"Failed to write output file: {str(e)}",
+            message=f"Failed to get PDF page count: {str(e)}",
         )
+
+    # Process each page
+    pdf_stem = pdf_path.stem
+    failed_pages = []
+    successful_pages = []
+    last_output = None
+
+    for page_num in range(1, num_pages + 1):
+        # Convert this page
+        conversion_result = convert_pdf_to_markdown(document, page_number=page_num)
+
+        if conversion_result.status == ConversionStatus.FAILURE:
+            failed_pages.append(page_num)
+            logger.warning(f"Failed to convert page {page_num} of {document.filename}: {conversion_result.message}")
+            continue
+
+        # Extract markdown content (stored temporarily in message field)
+        md_content = conversion_result.message or ""
+
+        # Generate output filename for this page
+        md_filename = f"{pdf_stem}_page-{page_num}.md"
+        md_file_path = output_dir / md_filename
+
+        # Write to output file (overwrite by default)
+        try:
+            md_file_path.write_text(md_content, encoding="utf-8")
+            successful_pages.append(page_num)
+            last_output = OutputArtifact(
+                filename=md_filename,
+                path=str(md_file_path),
+                size_bytes=md_file_path.stat().st_size if md_file_path.exists() else None,
+                source_document=document,
+            )
+        except Exception as e:
+            failed_pages.append(page_num)
+            logger.error(f"Failed to write page {page_num} of {document.filename}: {str(e)}")
+
+    # Determine overall result
+    if failed_pages:
+        error_msg = f"Failed to convert {len(failed_pages)} page(s): {failed_pages}"
+        if successful_pages:
+            error_msg += f" (succeeded: {len(successful_pages)} page(s))"
+        return ConversionResult(
+            document=document,
+            status=ConversionStatus.FAILURE,
+            message=error_msg,
+        )
+
+    # All pages succeeded
+    if last_output is None:
+        # This shouldn't happen if num_pages > 0, but handle edge case
+        return ConversionResult(
+            document=document,
+            status=ConversionStatus.FAILURE,
+            message="No pages to convert",
+        )
+
+    # Return success with info about all pages
+    return ConversionResult(
+        document=document,
+        status=ConversionStatus.SUCCESS,
+        output=last_output,  # Use last output as representative
+        message=f"Converted {num_pages} page(s) successfully",
+    )
 
 
 def convert_batch(input_dir: str, output_dir: str) -> ConversionJob:
     """
     Convert all PDF files in input directory to Markdown files in output directory.
+
+    Each PDF page is converted to a separate markdown file with naming pattern
+    {pdf_stem}_page-{page_num}.md.
 
     Args:
         input_dir: Path to directory containing PDF files

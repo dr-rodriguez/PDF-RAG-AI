@@ -17,6 +17,7 @@ dependencies = [
     "langchain-ollama>=1.0.0",
     "onnxruntime>=1.23.2",
     "python-dotenv>=1.0.0",
+    "pypdf>=5.0.0",
     "rapidocr>=3.4.2",
     "requests>=2.31.0",
 ]
